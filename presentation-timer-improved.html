@@ -178,12 +178,31 @@ function checkBells() {
     }
 }
 
-// 既存の playBell 関数を以下に置き換え
+// 音声ファイルのURLを指定
+const alarmSound = new Audio('Onoma-Ding04-2(Short).mp3');
+
+// ユーザーの操作で音声を再生可能にするための準備
+function prepareSound() {
+    alarmSound.play().then(() => {
+        alarmSound.pause();
+        alarmSound.currentTime = 0;
+    }).catch((error) => {
+        console.log('音声の再生準備に失敗しました:', error);
+    });
+}
+
+startBtn.addEventListener('click', () => {
+    prepareSound(); // タイマーをスタートする前に音声を準備
+    startTimer();
+});
+
 function playBell(count) {
     for (let i = 0; i < count; i++) {
         setTimeout(() => {
             alarmSound.currentTime = 0; // 音声を再生開始位置に戻す
-            alarmSound.play(); // 音声を再生
+            alarmSound.play().catch((error) => {
+                console.log('音声の再生に失敗しました:', error);
+            });
         }, i * 1000); // 1000ミリ秒（1秒）ごとに音声を再生
     }
 }
