@@ -121,6 +121,7 @@
         alarmSound.play().then(() => {
             alarmSound.pause();
             alarmSound.currentTime = 0;
+            console.log('音声の準備ができました');
         }).catch((error) => {
             console.log('音声の再生準備に失敗しました:', error);
         });
@@ -140,17 +141,21 @@
     function startTimer() {
         if (!isRunning) {
             isRunning = true;
+            console.log('タイマーをスタート');
             timer = setInterval(() => {
                 seconds++;
                 updateDisplay();
                 checkBells();
             }, 1000);
+        } else {
+            console.log('タイマーはすでに動いています');
         }
     }
 
     function stopTimer() {
         clearInterval(timer);
         isRunning = false;
+        console.log('タイマーをストップ');
     }
 
     function resetTimer() {
@@ -161,6 +166,7 @@
         bell1Rang = false;
         bell2Rang = false;
         bell3Rang = false;
+        console.log('タイマーをリセット');
     }
 
     let lastPlayedBell = null; // 追加: 最後に再生されたベルの記録
