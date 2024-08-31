@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>timer</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -70,7 +73,7 @@
 
         .input-wrapper {
             display: flex;
-            align-items: flex-start;
+            align-items: flex-start; /* インプット要素の左揃え */
         }
 
         .input-wrapper input {
@@ -144,116 +147,92 @@
     </div>
 
     <script>
-    let timer;
-    let seconds = 0;
-    let isRunning = false;
-    const timerDisplay = document.getElementById('timer');
-    const startBtn = document.getElementById('startBtn');
-    const stopBtn = document.getElementById('stopBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const bell1Input = document.getElementById('bell1');
-    const bell2Input = document.getElementById('bell2');
-    const bell3Input = document.getElementById('bell3');
-    
-    // 音声ファイルのURLを指定
-    const alarmSound = new Audio('Onoma-Ding04-2(Short).mp3');
+        let timer;
+        let seconds = 0;
+        let isRunning = false;
+        const timerDisplay = document.getElementById('timer');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const bell1Input = document.getElementById('bell1');
+        const bell2Input = document.getElementById('bell2');
+        const bell3Input = document.getElementById('bell3');
 
-    // ユーザーの操作で音声を再生可能にするための準備
-    function prepareSound() {
-        alarmSound.play().then(() => {
-            alarmSound.pause();
-            alarmSound.currentTime = 0;
-            console.log('音声の準備ができました');
-        }).catch((error) => {
-            console.log('音声の再生準備に失敗しました:', error);
-        });
-    }
+        const alarmSound = new Audio('Onoma-Ding04-2(Short).mp3');  // 音声ファイルをここで初期化
 
-    // ベルが鳴ったかを記録するフラグ
-    let bell1Rang = false;
-    let bell2Rang = false;
-    let bell3Rang = false;
-
-    function updateDisplay() {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-    }
-
-    function startTimer() {
-        if (!isRunning) {
-            isRunning = true;
-            console.log('タイマーをスタート');
-            timer = setInterval(() => {
-                seconds++;
-                updateDisplay();
-                checkBells();
-            }, 1000);
-        } else {
-            console.log('タイマーはすでに動いています');
-        }
-    }
-
-    function stopTimer() {
-        clearInterval(timer);
-        isRunning = false;
-        console.log('タイマーをストップ');
-    }
-
-    function resetTimer() {
-        stopTimer();
-        seconds = 0;
-        updateDisplay();
-        // リセット時にベルが鳴ったかどうかのフラグもリセット
-        bell1Rang = false;
-        bell2Rang = false;
-        bell3Rang = false;
-        console.log('タイマーをリセット');
-    }
-
-    let lastPlayedBell = null; // 追加: 最後に再生されたベルの記録
-
-    function checkBells() {
-        const currentMinutes = Math.floor(seconds / 60);
-
-        // ベル1がまだ再生されていない場合
-        if (currentMinutes === parseInt(bell1Input.value) && lastPlayedBell !== 1) {
-            playBell(1);
-            lastPlayedBell = 1; // ベル1が再生されたことを記録
+        function prepareSound() {
+            alarmSound.play().then(() => {
+                alarmSound.pause();
+                alarmSound.currentTime = 0;
+                console.log('音声の準備ができました');
+            }).catch((error) => {
+                console.log('音声の再生準備に失敗しました:', error);
+            });
         }
 
-        // ベル2がまだ再生されていない場合
-        if (currentMinutes === parseInt(bell2Input.value) && lastPlayedBell !== 2) {
-            playBell(2);
-            lastPlayedBell = 2; // ベル2が再生されたことを記録
+        function updateDisplay() {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
         }
 
-        // ベル3がまだ再生されていない場合
-        if (currentMinutes === parseInt(bell3Input.value) && lastPlayedBell !== 3) {
-            playBell(3);
-            lastPlayedBell = 3; // ベル3が再生されたことを記録
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                console.log('タイマーをスタート');
+                timer = setInterval(() => {
+                    seconds++;
+                    updateDisplay();
+                    checkBells();
+                }, 1000);
+            } else {
+                console.log('タイマーはすでに動いています');
+            }
         }
-    }
 
-    function playBell(count) {
-        for (let i = 0; i < count; i++) {
-            setTimeout(() => {
-                alarmSound.currentTime = 0; // 音声を再生開始位置に戻す
-                alarmSound.play().catch((error) => {
-                    console.log('音声の再生に失敗しました:', error);
-                });
-            }, i * 1000); // 1000ミリ秒（1秒）ごとに音声を再生
+        function stopTimer() {
+            clearInterval(timer);
+            isRunning = false;
+            console.log('タイマーをストップ');
         }
-    }
 
-    startBtn.addEventListener('click', () => {
-        prepareSound(); // タイマーをスタートする前に音声を準備
-        startTimer();
-    });
-    
-    stopBtn.addEventListener('click', stopTimer);
-    resetBtn.addEventListener('click', resetTimer);
-</script>
+        function resetTimer() {
+            stopTimer();
+            seconds = 0;
+            updateDisplay();
+            console.log('タイマーをリセット');
+        }
 
+        let lastPlayedBell = null;
+
+        function checkBells() {
+            const currentMinutes = Math.floor(seconds / 60);
+
+            if (currentMinutes === parseInt(bell1Input.value) && lastPlayedBell !== 1) {
+                playBell(1);
+                lastPlayedBell = 1;
+            }
+
+            if (currentMinutes === parseInt(bell2Input.value) && lastPlayedBell !== 2) {
+                playBell(2);
+                lastPlayedBell = 2;
+            }
+
+            if (currentMinutes === parseInt(bell3Input.value) && lastPlayedBell !== 3) {
+                playBell(3);
+                lastPlayedBell = 3;
+            }
+        }
+
+        function playBell(bellNumber) {
+            console.log(`ベル${bellNumber}の時間です!`);
+            alarmSound.play().catch(error => console.log('音声再生に失敗しました:', error));
+        }
+
+        startBtn.addEventListener('click', startTimer);
+        stopBtn.addEventListener('click', stopTimer);
+        resetBtn.addEventListener('click', resetTimer);
+        document.addEventListener('DOMContentLoaded', prepareSound);
+    </script>
 </body>
 </html>
