@@ -218,16 +218,6 @@
                 lastPlayedBell = 3;
             }
         }
-        function playBell(count) {
-            for (let i = 0; i < count; i++) {
-                setTimeout(() => {
-                    alarmSound.currentTime = 0; // 音声を再生開始位置に戻す
-                    alarmSound.play().catch((error) => {
-                        console.log('音声の再生に失敗しました:', error);
-                    });
-                }, i * 1000); // 1000ミリ秒（1秒）ごとに音声を再生
-            }
-        }
         function playBell(bellNumber) {
             console.log(`ベル${bellNumber}の時間です!`);
             alarmSound.play().catch(error => console.log('音声再生に失敗しました:', error));
