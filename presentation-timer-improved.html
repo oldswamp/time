@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>timer</title>
+    <title>time</title>
     <style>
         * {
             box-sizing: border-box;
@@ -221,33 +221,22 @@
 
         function playBell(bellNumber, times) {
             console.log(`ベル${bellNumber}の時間です! ${times}回音を鳴らします。`);
-            
+
             let count = 0;
+            const interval = setInterval(() => {
+                alarmSound.play().catch(error => console.log('音声再生に失敗しました:', error));
+                count++;
 
-            function playSound() {
-                if (count < times) {
-                    alarmSound.play().then(() => {
-                        console.log(`ベル${bellNumber}の音が再生されました (${count + 1}回目)。`);
-                        count++;
-                        setTimeout(playSound, 1000);  // 次の音を1秒後に鳴らす
-                    }).catch(error => {
-                        console.log('音声再生に失敗しました:', error);
-                        setTimeout(playSound, 1000); // 再試行
-                    });
+                if (count === times) {
+                    clearInterval(interval);
                 }
-            }
-
-            playSound();
+            }, 1000);  // 1秒間隔で音を鳴らす
         }
 
-        // スマートフォンなどでの音声再生の準備
         startBtn.addEventListener('click', () => {
             startTimer();
-            alarmSound.play().catch(error => {
-                console.log('初回の音声再生に失敗しました:', error);
-            }); 
+            alarmSound.play().catch(error => console.log('音声再生に失敗しました:', error)); // スマホ対応: 最初のユーザー操作で音声を再生可能に
         });
-
         stopBtn.addEventListener('click', stopTimer);
         resetBtn.addEventListener('click', resetTimer);
     </script>
