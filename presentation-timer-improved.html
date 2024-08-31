@@ -160,16 +160,6 @@
 
         const alarmSound = new Audio('Onoma-Ding04-2(Short).mp3');  // 音声ファイルをここで初期化
 
-        function prepareSound() {
-            alarmSound.play().then(() => {
-                alarmSound.pause();
-                alarmSound.currentTime = 0;
-                console.log('音声の準備ができました');
-            }).catch((error) => {
-                console.log('音声の再生準備に失敗しました:', error);
-            });
-        }
-
         function updateDisplay() {
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = seconds % 60;
@@ -229,10 +219,12 @@
             alarmSound.play().catch(error => console.log('音声再生に失敗しました:', error));
         }
 
-        startBtn.addEventListener('click', startTimer);
+        startBtn.addEventListener('click', () => {
+            startTimer();
+            alarmSound.play().catch(error => console.log('音声再生に失敗しました:', error)); // スマホ対応: 最初のユーザー操作で音声を再生可能に
+        });
         stopBtn.addEventListener('click', stopTimer);
         resetBtn.addEventListener('click', resetTimer);
-        document.addEventListener('DOMContentLoaded', prepareSound);
     </script>
 </body>
 </html>
