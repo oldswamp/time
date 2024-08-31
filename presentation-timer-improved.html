@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>timer</title>
+    <title>time</title>
     <style>
         * {
             box-sizing: border-box;
@@ -229,7 +229,7 @@
                     alarmSound.play().then(() => {
                         console.log(`ベル${bellNumber}の音が再生されました (${count + 1}回目)。`);
                         count++;
-                        setTimeout(playSound, 700);  // 次の音を1秒後に鳴らす
+                        setTimeout(playSound, 1000);  // 次の音を1秒後に鳴らす
                     }).catch(error => {
                         console.log('音声再生に失敗しました:', error);
                     });
