@@ -151,7 +151,7 @@
         </div>
     </div>
 
-   <script>
+    <script>
         let timer;
         let seconds = 0;
         let isRunning = false;
@@ -226,9 +226,13 @@
 
             function playSound() {
                 if (count < times) {
-                    alarmSound.play().catch(error => console.log('音声再生に失敗しました:', error));
-                    count++;
-                    setTimeout(playSound, 1000);  // 次の音を1秒後に鳴らす
+                    alarmSound.play().then(() => {
+                        console.log(`ベル${bellNumber}の音が再生されました (${count + 1}回目)。`);
+                        count++;
+                        setTimeout(playSound, 1000);  // 次の音を1秒後に鳴らす
+                    }).catch(error => {
+                        console.log('音声再生に失敗しました:', error);
+                    });
                 }
             }
 
