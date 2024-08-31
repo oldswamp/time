@@ -151,7 +151,7 @@
         </div>
     </div>
 
-    <script>
+   <script>
         let timer;
         let seconds = 0;
         let isRunning = false;
@@ -204,23 +204,33 @@
             const currentMinutes = Math.floor(seconds / 60);
 
             if (currentMinutes === parseInt(bell1Input.value) && lastPlayedBell !== 1) {
-                playBell(1);
+                playBell(1, 1);
                 lastPlayedBell = 1;
             }
 
             if (currentMinutes === parseInt(bell2Input.value) && lastPlayedBell !== 2) {
-                playBell(2);
+                playBell(2, 2);
                 lastPlayedBell = 2;
             }
 
             if (currentMinutes === parseInt(bell3Input.value) && lastPlayedBell !== 3) {
-                playBell(3);
+                playBell(3, 3);
                 lastPlayedBell = 3;
             }
         }
-        function playBell(bellNumber) {
-            console.log(`ベル${bellNumber}の時間です!`);
-            alarmSound.play().catch(error => console.log('音声再生に失敗しました:', error));
+
+        function playBell(bellNumber, times) {
+            console.log(`ベル${bellNumber}の時間です! ${times}回音を鳴らします。`);
+
+            let count = 0;
+            const interval = setInterval(() => {
+                alarmSound.play().catch(error => console.log('音声再生に失敗しました:', error));
+                count++;
+
+                if (count === times) {
+                    clearInterval(interval);
+                }
+            }, 1000);  // 1秒間隔で音を鳴らす
         }
 
         startBtn.addEventListener('click', () => {
