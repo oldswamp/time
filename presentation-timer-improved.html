@@ -221,16 +221,18 @@
 
         function playBell(bellNumber, times) {
             console.log(`ベル${bellNumber}の時間です! ${times}回音を鳴らします。`);
-
+            
             let count = 0;
-            const interval = setInterval(() => {
-                alarmSound.play().catch(error => console.log('音声再生に失敗しました:', error));
-                count++;
 
-                if (count === times) {
-                    clearInterval(interval);
+            function playSound() {
+                if (count < times) {
+                    alarmSound.play().catch(error => console.log('音声再生に失敗しました:', error));
+                    count++;
+                    setTimeout(playSound, 1000);  // 次の音を1秒後に鳴らす
                 }
-            }, 1000);  // 1秒間隔で音を鳴らす
+            }
+
+            playSound();
         }
 
         startBtn.addEventListener('click', () => {
